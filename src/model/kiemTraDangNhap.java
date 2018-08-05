@@ -58,7 +58,7 @@ public class kiemTraDangNhap {
                 }
             }
           
-
+                   System.out.println("ko co tai khoan nay!");
 
             conn.close();
         } catch (Exception e) {

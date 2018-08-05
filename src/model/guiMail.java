@@ -53,7 +53,7 @@ public class guiMail {
                 String pass1 = res.getString("password");
                 String email = res.getString("email");
                 if (user1.equals(user2) && pass1.equals(password2) ) {
-                    System.out.println("xxxx"+email);
+                  
                     emailx = email;
                     break;
                 }
@@ -90,20 +90,21 @@ public class guiMail {
 
                     Message message = new MimeMessage(session);
 
-                    message.setFrom(new InternetAddress("nguyenvanthao8370@gmail.com"));
+                    message.setFrom(new InternetAddress("nguyenvanthao95@gmail.com"));
 
                     message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse("nguyenvanthao95@gmail.com")
+                            InternetAddress.parse(emailx)
                     );
 
-                    message.setSubject("xac nhan OTP");
+                    message.setSubject("OTP");
 
                     message.setText("OTP," + "\n\n key la: "+maKey);
 
                     Transport.send(message);
+                    System.out.println("da gui mail");
 
                 } catch (MessagingException e) {
-                    System.out.println("loi gui mail");
+                    System.err.println("lỗi gửi mail");
                     return false;
 
                 }
@@ -120,4 +121,5 @@ public class guiMail {
         //
         return true;
     }
+ 
 }

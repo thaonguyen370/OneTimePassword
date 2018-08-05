@@ -59,7 +59,7 @@ public class guimail {
             
             message.setSubject("Testing Subject");
 
-            message.setText("Dear OTP," + "\n\n asdsadasdas!");
+            message.setText("Dear OTádsadsadP," + "\n\nanh yeu e!");
 
             Transport.send(message);
 

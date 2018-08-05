@@ -31,13 +31,17 @@ public class key {
     public key(int keyKiemTra) {
         this.keyKiemTra = keyKiemTra;
     }
+
     public int sinh_key_moi() {
         Random vk = new Random();
         long pos, t;
         long sin;
         while (true) {
-            int xxx = vk.nextInt(1000000000) + 100000000;//
-            sin = xxx;   
+            int xxx;
+            do {
+                xxx = vk.nextInt(1000000000);
+            } while (xxx >= 1000000000 || xxx < 100000000);//dung de chon ra so 9 chu so
+            sin = xxx;
             long sum = sin % 10;
             sin /= 10;
             for (pos = 0; pos < 8 && sin > 0; sin /= 10, ++pos) {
@@ -49,35 +53,37 @@ public class key {
                 }
             }
             if (pos < 8 || sin > 0 || sum % 10 == 1) {
-               // System.out.println("khong hop le");
+                // System.out.println("khong hop le");
             } else {
                 System.out.println("so hop le!");
-                System.out.println("key la: "+xxx);
-                keySinhRa=xxx;
+                System.out.println("key la: " + xxx);
+                keySinhRa = xxx;
                 return xxx;
 
             }
-        }    
+        }
     }
-    public boolean kimTraKeyHopLe(int keyKT){
-        if(keyKT <100000000)
+
+    public boolean kimTraKeyHopLe(int keyKT) {
+        if (keyKT < 100000000||keyKT>1000000000) {
             return false;
+        }
         long pos, t;
-        long sin=keyKT;
-            long sum = sin % 10;
-            sin /= 10;
-            for (pos = 0; pos < 8 && sin > 0; sin /= 10, ++pos) {
-                t = sin % 10;
-                if (pos % 2 == 1) {
-                    sum += t;
-                } else {
-                    sum += (2 * t) / 10 + (2 * t) % 10;
-                }
+        long sin = keyKT;
+        long sum = sin % 10;
+        sin /= 10;
+        for (pos = 0; pos < 8 && sin > 0; sin /= 10, ++pos) {
+            t = sin % 10;
+            if (pos % 2 == 1) {
+                sum += t;
+            } else {
+                sum += (2 * t) / 10 + (2 * t) % 10;
             }
-            if (pos < 8 || sin > 0 || sum % 10 == 1) {
-                System.out.println("khong hop le");
-                return false;
-            } 
+        }
+        if (pos < 8 || sin > 0 || sum % 10 == 1) {
+            System.out.println("khong hop le");
+            return false;
+        }
 
         return true;
     }

@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package Controller;
 
 /**
  *
  * @author thao
  */
-public class ketNoi {
+public interface GiaoTiep {
+    public Object[] toObjects();
     
 }

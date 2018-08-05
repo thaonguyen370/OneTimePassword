@@ -19,7 +19,10 @@ public class soBaoHiemCanada {
         long pos, t;
         long sin;
         Random vk=new Random();
-        int xxx=vk.nextInt(1000000000)+100000000;
+        int xxx;
+        do {            
+          xxx=vk.nextInt(1000000000);   
+        } while (xxx>=1000000000||xxx<100000000);
         System.out.println("test.soBaoHiemCanada.main()"+xxx);
         
         Scanner sc = new Scanner(System.in);
