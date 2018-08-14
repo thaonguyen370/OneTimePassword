@@ -621,7 +621,7 @@ public class OTP extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Quay lại");
+        jButton5.setText("Đăng Xuất");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -810,9 +810,9 @@ public class OTP extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             PrintStream ps = new PrintStream(client.getOutputStream());
-           
-            int soDT=Integer.parseInt(jTextFSoDT.getText().toString().trim());
-            
+
+            int soDT = Integer.parseInt(jTextFSoDT.getText().toString().trim());
+
             user user1 = new user(jTextFHoTen.getText().toString(), jTextFNgaySinh.getText().toString(), jTextFUser.getText().toString(), jTextFPassword.getText().toString(), jTextFNhapLaiPassword.getText().toString(), jTextFEmail.getText().toString(), soDT);
             kiemTraDangKi x = new kiemTraDangKi(user1);
             if (x.kiemTraRong()) {
@@ -828,12 +828,12 @@ public class OTP extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(ManHinhGiaoDich, "password khong trùng nhau!");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(ManHinhGiaoDich, "khong duoc de trong bat cu truong nao");
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(ManHinhGiaoDich, "so dien thoai phai nhap la loai so");
-           
+
         }
     }//GEN-LAST:event_btnDangKiActionPerformed
 
@@ -872,7 +872,7 @@ public class OTP extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             PrintStream ps = new PrintStream(client.getOutputStream());
-            if (JTextFMaOTP.getText().toString().length() ==9) {
+            if (JTextFMaOTP.getText().toString().length() == 9) {
                 ps.println(JTextFMaOTP.getText().toString());
             } else {
                 JOptionPane.showMessageDialog(NoiDungLay, "yêu cầu nhập đúng 9 chữ số!");
@@ -907,7 +907,7 @@ public class OTP extends javax.swing.JFrame {
     }//GEN-LAST:event_btnThoatActionPerformed
 
     private void jPanel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseEntered
-     //    TODO add your handling code here:
+        //    TODO add your handling code here:
         setColor(jPanel3);
     }//GEN-LAST:event_jPanel3MouseEntered
 
@@ -1006,12 +1006,13 @@ public class OTP extends javax.swing.JFrame {
         }
     }
 
-    public static final void quayLai() {
-        int kq = JOptionPane.showConfirmDialog(null, "key hợp lệ, bạn có muốn quay lại không?", "Thông tin", JOptionPane.YES_NO_OPTION);
+    public static final void quayLai() throws IOException {
+        int kq = JOptionPane.showConfirmDialog(null, "key hợp lệ, bạn có muốn đăng xuất không?", "Thông tin", JOptionPane.YES_NO_OPTION);
         if (kq == 0) {
             ManHinhGiaoDich.setVisible(false);
             DangNhapDangKi.setVisible(true);
-
+            PrintStream ps = new PrintStream(client.getOutputStream());
+            ps.println("dang xuat");
             flagx = 1;
         } else {
             flagx = 1;
@@ -1059,7 +1060,7 @@ public class OTP extends javax.swing.JFrame {
                             NoiDungLayMa.revalidate();
                             flagx = 0;
                         } else if (k.equals("Key hop le")) {
-                            flagx=1;
+                            flagx = 1;
                             quayLai();
 
                         } else if (k.equals("sai user hoac passsword!")) {
@@ -1073,7 +1074,6 @@ public class OTP extends javax.swing.JFrame {
 
                         } else if (k.equals("key không đúng mời nhập lại")) {
                             JOptionPane.showMessageDialog(NoiDungLayMa, "Key không đúng,nhap lai!");
-                        
 
                         } else if (k.equals("da dang xuat")) {
                             flagx = 1;
@@ -1104,7 +1104,7 @@ public class OTP extends javax.swing.JFrame {
                                         if (dem == 0) {
                                             chuoi = "0" + phut + ":0" + giay;
                                             txtThoiGianGiaoDich.setText(chuoi);
-                                  //          JOptionPane.showMessageDialog(ManHinhGiaoDich, "Hết thời gian nhập!");
+                                            //          JOptionPane.showMessageDialog(ManHinhGiaoDich, "Hết thời gian nhập!");
 //                                            int g=JOptionPane.YES_NO_OPTION;
 //                                            int gg=JOptionPane.showConfirmDialog(ManHinhGiaoDich, "sss","sssss",g);
 //                                            if(gg==0){
@@ -1134,6 +1134,17 @@ public class OTP extends javax.swing.JFrame {
                             } else {
                                 System.exit(0);
                             }
+                        } else if (k.equals("ban da dung het key")) {
+                            flagx = 1;
+                            JOptionPane.showMessageDialog(NoiDungLayMa, "ban da dung het 50 key, xin lien he vs server!");
+                            
+                        } else if (k.equals("ban hay chon dang ki ki hoac dang nhap")) {
+                            JOptionPane.showMessageDialog(NoiDungLayMa, "Mời chọn khung đăng kí hoặc đăng nhâp!");
+
+                        }else if(k.equals("Ban da nhap qua 5 lan!")){
+                                ManHinhGiaoDich.setVisible(false);
+                                DangNhapDangKi.setVisible(true);
+                             JOptionPane.showMessageDialog(null, "Bạn đã nhập sai qua 5 lần rùi, đăng nhập lại để xác nhận!");
                         }
                     } catch (IOException ex) {
                         int kq = JOptionPane.showConfirmDialog(null, "Mất kết nối với server!", "Thông tin", JOptionPane.YES_NO_OPTION);

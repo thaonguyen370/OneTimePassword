@@ -5,6 +5,7 @@
  */
 package doiTuong;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -86,5 +87,13 @@ public class key {
         }
 
         return true;
+    }
+    public ArrayList<Integer> Sinh3Key(){
+        ArrayList<Integer> al=new ArrayList<>();
+        for(int i=0;i<3;i++){
+            al.add(sinh_key_moi());
+        }
+        System.out.println("sinh key thanh cong");
+        return  al;
     }
 }

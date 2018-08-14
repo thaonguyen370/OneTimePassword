@@ -7,6 +7,7 @@ package view_client;
 
 import Controller.GiaoTiep;
 import Controller.IOFile;
+import doiTuong.key;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,9 +19,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.KeyDuocCap;
 import server.server;
 import static server.server.DSDoiTuongClient;
+import static server.server.al_keyDcCap;
 import static server.server.al_s;
+import static server.server.iOFile_50Key;
 
 /**
  *
@@ -67,20 +71,23 @@ public class QLDSClient extends javax.swing.JFrame {
 
     public void ngatKetNoi() {
         int r = jTable1.getSelectedRow();
-        if (r != -1) {
+        if (r != -1&&al.size()>0&&al_s.size()>0) {
             try {
                 table.removeRow(r);
                 al.remove(r);
                 iOFile.ghi(al, "client.dat");
-                PrintStream ps = new PrintStream(al_s.get(r).getOutputStream());
+                if(!al_s.get(r).isClosed()){
+                     PrintStream ps = new PrintStream(al_s.get(r).getOutputStream());
 
                 ps.println("server đã ngắt kết nối");
                 al_s.get(r).close();
                 DSDoiTuongClient.remove(r);
 
                 System.out.println("da tat ket noi!");
+                }
+               
             } catch (IOException ex) {
-                Logger.getLogger(QLDSClient.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("ko thể liên lạc");
             }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Hay chon hang ma ban muon xoa!");
@@ -118,6 +125,7 @@ public class QLDSClient extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -165,32 +173,39 @@ public class QLDSClient extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 102, 51));
+        jButton3.setText("Cấp lại key mới");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(141, 141, 141)
-                .addComponent(jButton1)
-                .addGap(143, 143, 143)
-                .addComponent(jButton2)
-                .addGap(62, 179, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton3)
+                .addGap(89, 89, 89)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))
-                        .addGap(19, 19, 19)))
-                .addGap(93, 93, 93))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addGap(112, 112, 112))
         );
 
         DanhSachThietBi.addTab("Danh sách client", jPanel2);
@@ -262,9 +277,54 @@ public class QLDSClient extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         ngatKetNoi();
-     
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+ int r = jTable1.getSelectedRow();
+        if (r != -1) {
+           DoiTuongClient capLai=(DoiTuongClient) al.get(r);
+             //
+        int f=0;
+        int d=0;
+        for (GiaoTiep xx : al_keyDcCap) {
+            
+            f=0;
+            KeyDuocCap xz = (KeyDuocCap) xx;
+          
+            key key_50=new key();
+            System.out.println("kich thuoc mang la+: "+al_keyDcCap.size());
+             System.out.println("1 +: "+capLai.getUser());
+              System.out.println("2 +: "+xz.getUser());
+            if (xz.getUser().equals(capLai.getUser())) {
+                ArrayList<Integer> xc = key_50.Sinh3Key();
+                  JOptionPane.showMessageDialog(rootPane, xc.size());
+                xz.setAl(xc);
+               // al_keyDcCap.remove(xx);
+                al_keyDcCap.set(d, xz);
+               // al_keyDcCap.add(xz);
+                server.CapLaiKey(al_keyDcCap);
+               iOFile_50Key.ghi(al_keyDcCap, "DSKeyDCCap.dat");
+                f=1;
+                
+  
+                break;
+            }
+            d++;
+
+        }
+            if(f==1){
+                JOptionPane.showMessageDialog(rootPane, "Đã cấp lại key thành công!");
+            }else{
+                  JOptionPane.showMessageDialog(rootPane, "cap không thành công!");
+            }
+    
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Hay chon hang ma ban muon xoa!");
+        }
+      
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -306,6 +366,7 @@ public class QLDSClient extends javax.swing.JFrame {
     private javax.swing.JTabbedPane DanhSachThietBi;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
