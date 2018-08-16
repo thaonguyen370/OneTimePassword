@@ -53,19 +53,21 @@ public class server {
         }
         return false;
     }
-    public static void CapLaiKey(ArrayList<GiaoTiep> L){
+
+    public static void CapLaiKey(ArrayList<GiaoTiep> L) {
         iOFile_50Key.ghi(L, "DSKeyDCCap.dat");
     }
 
     public static void main(String[] args) {
         al_keyDcCap = new ArrayList<>();
+
         alx = new ArrayList<>();
         QL = new QLDSClient();
         iOFile_50Key = new IOFile();
         QL.setVisible(true);
 
         DSDoiTuongClient = new ArrayList();
-
+        al_keyDcCap = iOFile_50Key.doc("DSKeyDCCap.dat");
         System.out.println("\t\tserver san sang......");
         try {
             ss = new ServerSocket(8888);
@@ -107,11 +109,11 @@ public class server {
                                     break;
                                 }
 //                              
-                                   int soLanNhapKey=0;
+                                int soLanNhapKey = 0;
                                 String m = br.readLine().toString().trim();//nhận gói đầu tiên gói đầu tiên để biết thuôc trường hợp đăng kí hay đăng nhập
                                 String m1 = m.substring(1);//m1 chính là tách gói đầu tiên,nếu là đăng nhập tách ra là tên user, còn đăng kí tách ra là họ tên
                                 String m2 = m.substring(0, 1);// m2 dùng để kiểm tra là số 0 hay là số 1, nếu số 0 thì nó là đăng nhâp, nếu 1 là đăng kí
-                                 
+
                                 int dd;//mục đích bắt các trường hợp ngoại lệ
                                 try {
                                     dd = Integer.parseInt(m2);//chuyển từ dạng từ chuổi sang số
@@ -139,7 +141,6 @@ public class server {
                                             QL.them(doiTuongClient);//thêm vào để hiện thị lên bảng
                                             flagz = 1;//gắn lại để cho lần sau ko ghi lại nữa
                                             //doc key
-                                            al_keyDcCap = iOFile_50Key.doc("DSKeyDCCap.dat");
 
                                         }
 
@@ -162,6 +163,7 @@ public class server {
                                                 //  int key_moi = key.sinh_key_moi();//tạo ra 1 cái key mới
                                                 int key_moi = 0;
                                                 KeyDuocCap temp;
+                                                int dem1 = 0;
                                                 for (GiaoTiep xx : al_keyDcCap) {
                                                     KeyDuocCap xz = (KeyDuocCap) xx;
                                                     temp = xz;
@@ -173,17 +175,18 @@ public class server {
 
                                                         key_moi = xc.get(0);
                                                         xc.remove(0);
-                                                        al_keyDcCap.remove(xx);
                                                         temp.setAl(xc);
-                                                        al_keyDcCap.add(temp);
+
+                                                        al_keyDcCap.set(dem1, temp);
                                                         iOFile_50Key.ghi(al_keyDcCap, "DSKeyDCCap.dat");
                                                         break;
                                                     }
+                                                    dem1++;
 
                                                 }
                                                 System.out.println("key nè: " + key_moi);
                                                 if (key_moi == 0) {
-                                                     ps.println("ban da dung het key");
+                                                    ps.println("ban da dung het key");
                                                     break;
                                                 }
 
@@ -236,15 +239,22 @@ public class server {
                                                             break;
                                                         }
 
-                                                        if(soLanNhapKey==5){
+                                                        if (soLanNhapKey == 5) {
                                                             ps.println("Ban da nhap qua 5 lan!");
-                                                            flag_thoiGian=true;
+                                                            flag_thoiGian = true;
+                                                            try {
+                                                                DSDoiTuongClient.remove(doiTuongClient);
+                                                                QL.xoaClient(client);
+
+                                                            } catch (Exception e) {
+                                                                System.out.println("canh bao");
+                                                            }
                                                         }
                                                         System.out.println("tien hanh doi");
 
                                                         int ma;
                                                         try {
-                                                            
+
                                                             ma = Integer.parseInt(abc);// chuyển dạng mã chuổi sang dạng mã số để so sánh
                                                         } catch (Exception e) {
                                                             ma = 1;
@@ -295,17 +305,15 @@ public class server {
                                             doiTuongClient.setUser(m1);
                                             doiTuongClient.setTrangThai("Đang hoạt động");
                                             DSDoiTuongClient.add(doiTuongClient);
-                                                 key _50key = new key();
+                                            key _50key = new key();
                                             al_keyDcCap.add(new KeyDuocCap(m1, _50key.Sinh3Key()));
                                             iOFile_50Key.ghi(al_keyDcCap, "DSKeyDCCap.dat");
-                                              flagz = 1;
+                                            flagz = 1;
                                             alx.add(doiTuongClient);
                                             QL.them(doiTuongClient);
-                                  
-                                       
 
                                         }
-                                     
+
                                         ps.println("Thanh cong");
                                         while (true) {
 
@@ -325,7 +333,7 @@ public class server {
                                                 key key = new key();
                                                 int key_moi = 0;
 //                                       
-                                             
+
                                                 KeyDuocCap temp;
                                                 for (GiaoTiep xx : al_keyDcCap) {
                                                     KeyDuocCap xz = (KeyDuocCap) xx;
@@ -334,6 +342,7 @@ public class server {
                                                         ArrayList<Integer> xc = xz.getAl();
                                                         if (xc.size() == 0) {
                                                             ps.println("ban da dung het key");
+                                                            break;
                                                         }
 
                                                         key_moi = xc.get(0);
@@ -403,14 +412,19 @@ public class server {
                                                         }
 
                                                         System.out.println("tien hanh doi");
-                                                          soLanNhapKey++;
-                                                        if(soLanNhapKey==5){
-                                                              ps.println("Ban da nhap qua 5 lan!");
-                                                              flag_thoiGian = true;
-                                                           
+                                                        soLanNhapKey++;
+                                                        if (soLanNhapKey == 5) {
+                                                            ps.println("Ban da nhap qua 5 lan!");
+                                                            flag_thoiGian = true;
+                                                            try {
+                                                                DSDoiTuongClient.remove(doiTuongClient);
+                                                                QL.xoaClient(client);
+
+                                                            } catch (Exception e) {
+                                                                System.out.println("canh bao");
+                                                            }
                                                         }
-                                                      
-                                                       
+
                                                         int ma;
                                                         try {
                                                             ma = Integer.parseInt(abc);
@@ -444,6 +458,9 @@ public class server {
 
                                                 break;
                                             }
+                                            if (flag_thoiGian == true) {
+                                                break;
+                                            }
 
                                         }
                                     } else {
@@ -464,7 +481,7 @@ public class server {
                             } catch (Exception e) {
                                 System.out.println("canh bao");
                             }
-                         
+
                             al_s.remove(client);
                             System.out.println(" may client da disconect");
                         }
